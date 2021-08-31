@@ -171,6 +171,7 @@ if __name__ == '__main__':
 
     users.add_user(test_user)
 
+
     users.add_tracked_post(test_user)
     Thread(target=users.foo).start()
     time.sleep(10)
