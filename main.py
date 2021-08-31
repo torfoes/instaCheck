@@ -143,6 +143,7 @@ class user_base:
 
 
 if __name__ == '__main__':
+    print("this is fucking stupid \n\n")
     # user_name = input("Enter username: ")
     # url = 'https://www.instagram.com/%s/?__a=1' % user_name
     # print(url)
