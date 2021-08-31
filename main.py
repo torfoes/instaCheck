@@ -9,6 +9,9 @@ from threading import Thread
 from instagram_web_api import Client, ClientError, ClientLoginError
 
 
+# raise queryError:
+#     print("Error getting a response froom instagram.")
+
 class MyClient(Client):
 
     @staticmethod
@@ -44,9 +47,10 @@ class user_base:
         self.tracked_posts = []
 
     def query_user(self, user_id):
-        user_feed_info = self.web_api.user_feed(user_id)
-        return user_feed_info
-
+        try:
+            user_feed_info = self.web_api.user_feed(user_id)
+        except:
+            print("Erorr in querying instagram.")
     def add_user(self, user_id):
         user_feed_info = self.query_user(user_id)
         self.user_dict[user_id] = user_feed_info
