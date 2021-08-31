@@ -49,8 +49,11 @@ class user_base:
     def query_user(self, user_id):
         try:
             user_feed_info = self.web_api.user_feed(user_id)
+            return user_feed_info
         except:
             print("Erorr in querying instagram.")
+            exit()
+
     def add_user(self, user_id):
         user_feed_info = self.query_user(user_id)
         self.user_dict[user_id] = user_feed_info
