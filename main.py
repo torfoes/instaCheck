@@ -51,8 +51,7 @@ class user_base:
             user_feed_info = self.web_api.user_feed(user_id)
             return user_feed_info
         except:
-            print("Erorr in querying instagram.")
-            exit()
+            print("Error in querying instagram.")
 
     def add_user(self, user_id):
         user_feed_info = self.query_user(user_id)
@@ -150,7 +149,10 @@ class user_base:
 
 
 if __name__ == '__main__':
-    print("this is fucking stupid sung rung yoo.\n")
+    a = MyClient()
+
+    print(a._make_request("https://www.instagram.com/karlos.zurutuza/?__a=1"))
+
     # user_name = input("Enter username: ")
     # url = 'https://www.instagram.com/%s/?__a=1' % user_name
     # print(url)
@@ -164,7 +166,6 @@ if __name__ == '__main__':
 
     # print(response.json())
 
-
     # test_id = '10448683263'
 
     # users.query_user('10448683263')
@@ -172,17 +173,18 @@ if __name__ == '__main__':
     # users.query_user('1234177284')
     #
     #
-    users = user_base()
 
-
-    test_user = '1234177284'
-
-    users.add_user(test_user)
-
-    users.add_tracked_post(test_user)
-    Thread(target=users.foo).start()
-
-    users.add_user('199414232')
-    users.add_tracked_post('199414232')
-    users.add_user('10448683263')
-    users.add_tracked_post('10448683263')
+    # users = user_base()
+    #
+    #
+    # test_user = '1234177284'
+    #
+    # users.add_user(test_user)
+    #
+    # users.add_tracked_post(test_user)
+    # Thread(target=users.foo).start()
+    #
+    # users.add_user('199414232')
+    # users.add_tracked_post('199414232')
+    # users.add_user('10448683263')
+    # users.add_tracked_post('10448683263')
