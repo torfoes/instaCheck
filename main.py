@@ -159,7 +159,7 @@ class user(userBase):
 if __name__ == '__main__':
     a = MyClient()
 
-    user_name = input("Enter username: ")
+    user_name = input("Enter username fucker: ")
     url = 'https://www.instagram.com/%s/?__a=1' % user_name
     print(url)
     print(a._make_request(url))
