@@ -150,7 +150,7 @@ class user_base:
 
 
 if __name__ == '__main__':
-    print("this is fucking stupid \n\n")
+    print("this is fucking stupid sung rung yoo.\n")
     # user_name = input("Enter username: ")
     # url = 'https://www.instagram.com/%s/?__a=1' % user_name
     # print(url)
@@ -179,10 +179,9 @@ if __name__ == '__main__':
 
     users.add_user(test_user)
 
-
     users.add_tracked_post(test_user)
     Thread(target=users.foo).start()
-    time.sleep(10)
+
     users.add_user('199414232')
     users.add_tracked_post('199414232')
     users.add_user('10448683263')
