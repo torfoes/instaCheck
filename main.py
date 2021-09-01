@@ -12,6 +12,8 @@ from instagram_web_api import Client, ClientError, ClientLoginError
 # raise queryError:
 #     print("Error getting a response froom instagram.")
 
+QUERY_TIME = 30
+
 class MyClient(Client):
 
     @staticmethod
@@ -40,25 +42,14 @@ class MyClient(Client):
         return login_res
 
 
-class user_base:
+
+
+class userBase:
     def __init__(self):
         self.user_dict = {}
         self.web_api = MyClient()
-        self.tracked_posts = []
 
-    def query_user(self, user_id):
-        try:
-            user_feed_info = self.web_api.user_feed(user_id)
-            return user_feed_info
-        except:
-            print("Error in querying instagram.")
-
-    def add_user(self, user_id):
-        user_feed_info = self.query_user(user_id)
-        self.user_dict[user_id] = user_feed_info
-        return user_feed_info
-
-    def all_posts(self):
+    def display(self):
         for user in self.user_dict:
             print("User: " + user)
             for post in self.user_dict[user]:
@@ -68,59 +59,37 @@ class user_base:
         for user in self.user_dict:
             print("User: " + user)
 
-    def display_user_posts(self, user_id):
-        for index, post in enumerate(self.user_dict[user_id]):
-            print(index, post)
+    def add_user(self, user_name):
+        new_user = user(user_name)
 
-    def num_change_check(self, user_id):
-        saved_user = self.user_dict[user_id]
-        current_user = self.add_user(user_id)
+        if new_user is None:
+            print("None returned from query........")
+            exit()
+            return
+        else:
+            self.user_dict[user_name] = new_user
+            return new_user
 
-        saved_user_posts = []
-        current_user_posts = []
+    def add_tracked_post(self, user_name):
+        tracked_user = self.add_user(user_name)
 
-        print("Saved Posts:")
-        for post in self.user_dict[user_id]:
-            saved_user_posts.append(post)
-            print(post)
-
-        print("New Query:")
-        for post in current_user:
-            current_user_posts.append(post)
-            print(post)
-
-        if len(saved_user_posts) != len(current_user_posts):
-            print("There has been a change in the number of posts.")
-
-    def add_tracked_post(self, user_id):
         print("Which post would you like to track?")
-        self.display_user_posts(user_id)
-
-        # if user_id in self.user_dict:
-        #     self.add_user(user_id)
-
-        posts = self.user_dict[user_id]
-        # print(posts)
-
+        tracked_user.display_posts()
         post_index = int(input("Enter post number: "))
 
-        tracked_post = posts[post_index]
-        # print("Tracking post ", tracked_post)
-
-        id_and_post = [user_id, tracked_post]
-        self.tracked_posts.append(id_and_post)
+        tracked_user.track(post_index)
 
     def foo(self):
         while True:
-            for user in self.tracked_posts:
-                user_id = user[0]
-                tracked_post = user[1]
+            for user_key in self.user_dict:
+                current_user = self.user_dict[user_key]
+                tracked_post_number = current_user.tracked_posts[0]
 
-                tracked_post_id = tracked_post['node']['id']
+                tracked_post_id = current_user.posts[tracked_post_number]['node']['id']
 
-                print("Checking user:", user_id, "post:", tracked_post_id)
+                print("Checking user:", current_user.user_name, "post:", tracked_post_id)
 
-                curr_user_info = self.query_user(user_id)
+                curr_user_info = current_user.query_user()
                 # print(curr_user_info)
 
                 post_exists = False
@@ -145,17 +114,55 @@ class user_base:
                     #         print("Post no longer exists.")
                     #         post_exists = False
 
-            time.sleep(30)
+            time.sleep(QUERY_TIME)
+
+
+class user(userBase):
+    def __init__(self, user_name):
+        super().__init__()
+        self.user_name = user_name
+        self.profile = self.get_profile()
+        self.id = self.get_id()
+        self.posts = self.query_user()
+        self.tracked_posts = []
+
+    def get_profile(self):
+        user_url = 'https://www.instagram.com/%s/?__a=1' % self.user_name
+        try:
+            return self.web_api._make_request(user_url)
+        except:
+            print("User does not exist.")
+            return
+
+    def get_id(self):
+        user_id = self.profile["logging_page_id"]
+        user_id = user_id[12:]
+        return user_id
+
+    def query_user(self):
+        try:
+            self.posts = self.web_api.user_feed(self.id)
+            return self.posts
+        except:
+            print("Error in querying instagram.")
+            return
+
+    def display_posts(self):
+        print("Displaying %s (%s) posts:" % (self.user_name, self.id))
+        for index, post in enumerate(self.posts):
+            print(index, post)
+
+    def track(self, post_num):
+        self.tracked_posts.append(post_num)
 
 
 if __name__ == '__main__':
-    a = MyClient()
-
-    print(a._make_request("https://www.instagram.com/karlos.zurutuza/?__a=1"))
-
+    # a = MyClient()
+    #
     # user_name = input("Enter username: ")
     # url = 'https://www.instagram.com/%s/?__a=1' % user_name
     # print(url)
+    # print(a._make_request(url))
 
     # response = requests.get(url)
 
@@ -174,7 +181,10 @@ if __name__ == '__main__':
     #
     #
 
-    # users = user_base()
+    users = userBase()
+    test_user = input("Input user to track: ")
+    users.add_tracked_post(test_user)
+
     #
     #
     # test_user = '1234177284'
@@ -182,7 +192,7 @@ if __name__ == '__main__':
     # users.add_user(test_user)
     #
     # users.add_tracked_post(test_user)
-    # Thread(target=users.foo).start()
+    Thread(target=users.foo).start()
     #
     # users.add_user('199414232')
     # users.add_tracked_post('199414232')
