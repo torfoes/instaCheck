@@ -89,7 +89,7 @@ class userBase:
 
                 print("Checking user:", current_user.user_name, "post:", tracked_post_id)
 
-                curr_user_info = current_user.query_user()
+                curr_user_info = current_user.get_posts()
                 # print(curr_user_info)
 
                 post_exists = False
@@ -123,7 +123,7 @@ class user(userBase):
         self.user_name = user_name
         self.profile = self.get_profile()
         self.id = self.get_id()
-        self.posts = self.query_user()
+        self.posts = self.get_posts()
         self.tracked_posts = []
 
     def get_profile(self):
@@ -139,7 +139,7 @@ class user(userBase):
         user_id = user_id[12:]
         return user_id
 
-    def query_user(self):
+    def get_posts(self):
         try:
             self.posts = self.web_api.user_feed(self.id)
             return self.posts
@@ -157,12 +157,12 @@ class user(userBase):
 
 
 if __name__ == '__main__':
-    # a = MyClient()
-    #
-    # user_name = input("Enter username: ")
-    # url = 'https://www.instagram.com/%s/?__a=1' % user_name
-    # print(url)
-    # print(a._make_request(url))
+    a = MyClient()
+
+    user_name = input("Enter username: ")
+    url = 'https://www.instagram.com/%s/?__a=1' % user_name
+    print(url)
+    print(a._make_request(url))
 
     # response = requests.get(url)
 
@@ -175,24 +175,18 @@ if __name__ == '__main__':
 
     # test_id = '10448683263'
 
-    # users.query_user('10448683263')
-    #
-    # users.query_user('1234177284')
-    #
-    #
-
-    users = userBase()
-    test_user = input("Input user to track: ")
-    users.add_tracked_post(test_user)
-
-    #
-    #
-    # test_user = '1234177284'
-    #
-    # users.add_user(test_user)
-    #
+    # users = userBase()
+    # test_user = input("Input user to track: ")
     # users.add_tracked_post(test_user)
-    Thread(target=users.foo).start()
+    #
+    # #
+    # #
+    # # test_user = '1234177284'
+    # #
+    # # users.add_user(test_user)
+    # #
+    # # users.add_tracked_post(test_user)
+    # Thread(target=users.foo).start()
     #
     # users.add_user('199414232')
     # users.add_tracked_post('199414232')
