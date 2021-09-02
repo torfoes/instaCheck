@@ -71,13 +71,18 @@ class userBase:
             return new_user
 
     def add_tracked_post(self, user_name):
-        tracked_user = self.add_user(user_name)
+        try:
+            tracked_user = self.add_user(user_name)
 
-        print("Which post would you like to track?")
-        tracked_user.display_posts()
-        post_index = int(input("Enter post number: "))
+            print("Which post would you like to track?")
+            tracked_user.display_posts()
+            post_index = int(input("Enter post number: "))
 
-        tracked_user.track(post_index)
+            tracked_user.track(post_index)
+
+        except:
+            print("Creation of user class failed.")
+
 
     def foo(self):
         while True:
@@ -128,11 +133,8 @@ class user(userBase):
 
     def get_profile(self):
         user_url = 'https://www.instagram.com/%s/?__a=1' % self.user_name
-        try:
-            return self.web_api._make_request(user_url)
-        except:
-            print("User does not exist.")
-            return
+        self.web_api._make_request(user_url)
+        return
 
     def get_id(self):
         user_id = self.profile["logging_page_id"]
@@ -140,12 +142,10 @@ class user(userBase):
         return user_id
 
     def get_posts(self):
-        try:
-            self.posts = self.web_api.user_feed(self.id)
-            return self.posts
-        except:
-            print("Error in querying instagram.")
-            return
+        print("Getting %s (%s) posts." % (self.user_name, self.id))
+        self.posts = self.web_api.user_feed(self.id)
+        # print("Error in querying instagram.")
+        return self.posts
 
     def display_posts(self):
         print("Displaying %s (%s) posts:" % (self.user_name, self.id))
@@ -157,12 +157,12 @@ class user(userBase):
 
 
 if __name__ == '__main__':
-    a = MyClient()
-
-    user_name = input("Enter username fucker: ")
-    url = 'https://www.instagram.com/%s/?__a=1' % user_name
-    print(url)
-    print(a._make_request(url))
+    # a = MyClient()
+    #
+    # user_name = input("Enter username fucker: ")
+    # url = 'https://www.instagram.com/%s/?__a=1' % user_name
+    # print(url)
+    # print(a._make_request(url))
 
     # response = requests.get(url)
 
@@ -175,18 +175,20 @@ if __name__ == '__main__':
 
     # test_id = '10448683263'
 
-    # users = userBase()
-    # test_user = input("Input user to track: ")
+    users = userBase()
+    test_user = input("Input user to track: ")
+    users.add_tracked_post(test_user)
     # users.add_tracked_post(test_user)
     #
     # #
     # #
     # # test_user = '1234177284'
     # #
-    # # users.add_user(test_user)
-    # #
-    # # users.add_tracked_post(test_user)
-    # Thread(target=users.foo).start()
+    # users.add_user(test_user)
+    # users.add_tracked_post(test_user)
+    # # #
+    # # # users.add_tracked_post(test_user)
+    Thread(target=users.foo).start()
     #
     # users.add_user('199414232')
     # users.add_tracked_post('199414232')
