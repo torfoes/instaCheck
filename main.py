@@ -74,20 +74,6 @@ class userBase:
             self.user_dict[username] = new_user
             return new_user
 
-<<<<<<< Updated upstream
-    def add_tracked_post(self, user_name):
-        try:
-            tracked_user = self.add_user(user_name)
-
-            print("Which post would you like to track?")
-            tracked_user.display_posts()
-            post_index = int(input("Enter post number: "))
-
-            tracked_user.track(post_index)
-
-        except:
-            print("Creation of user class failed.")
-=======
     def add_tracked_post(self):
         """creates a new user based input username"""
         tracked_user = self.add_user()
@@ -95,8 +81,8 @@ class userBase:
         print("Which post would you like to track: ")
         tracked_user.display_posts()
         post_index = int(input("Enter post index: "))
->>>>>>> Stashed changes
 
+        tracked_user.track(post_index)
 
     def periodic_check(self):
         while True:
@@ -134,11 +120,6 @@ class user(userBase):
         self.tracked_posts = []
 
     def get_profile(self):
-<<<<<<< Updated upstream
-        user_url = 'https://www.instagram.com/%s/?__a=1' % self.user_name
-        self.web_api._make_request(user_url)
-        return
-=======
         """Gets user profile from username."""
         print("Getting profile information.")
         user_url = 'https://www.instagram.com/%s/?__a=1' % self.username
@@ -147,7 +128,6 @@ class user(userBase):
         except:
             print("User does not exist.")
             return
->>>>>>> Stashed changes
 
     def get_id(self):
         """Strips user ID from profile information"""
@@ -156,12 +136,6 @@ class user(userBase):
         return user_id
 
     def get_posts(self):
-<<<<<<< Updated upstream
-        print("Getting %s (%s) posts." % (self.user_name, self.id))
-        self.posts = self.web_api.user_feed(self.id)
-        # print("Error in querying instagram.")
-        return self.posts
-=======
         """Uses user ID to get all CURRENT posts from a user without updating saved posts."""
         try:
             current_posts = self.web_api.user_feed(self.id, count=NUM_QUERY_POSTS)
@@ -169,7 +143,6 @@ class user(userBase):
         except:
             print("Error in querying instagram.")
             return
->>>>>>> Stashed changes
 
     def save_posts(self):
         print("Saving posts to current user.")
@@ -187,49 +160,8 @@ class user(userBase):
 
 
 if __name__ == '__main__':
-<<<<<<< Updated upstream
-    # a = MyClient()
-    #
-    # user_name = input("Enter username fucker: ")
-    # url = 'https://www.instagram.com/%s/?__a=1' % user_name
-    # print(url)
-    # print(a._make_request(url))
-
-    # response = requests.get(url)
-
-    # try:
-    #     response.raise_for_status()  # raises exception when not a 2xx response
-    # except:
-    #     print("Error in getting JSON shit from page, using Response")
-
-    # print(response.json())
-
-    # test_id = '10448683263'
-
-    users = userBase()
-    test_user = input("Input user to track: ")
-    users.add_tracked_post(test_user)
-    # users.add_tracked_post(test_user)
-    #
-    # #
-    # #
-    # # test_user = '1234177284'
-    # #
-    # users.add_user(test_user)
-    # users.add_tracked_post(test_user)
-    # # #
-    # # # users.add_tracked_post(test_user)
-    Thread(target=users.foo).start()
-    #
-    # users.add_user('199414232')
-    # users.add_tracked_post('199414232')
-    # users.add_user('10448683263')
-    # users.add_tracked_post('10448683263')
-=======
     users = userBase()
     users.add_tracked_post()
     users.add_tracked_post()
 
-    user_add()
     Thread(target=users.periodic_check).start()
->>>>>>> Stashed changes
